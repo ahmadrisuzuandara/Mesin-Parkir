@@ -1,0 +1,83 @@
+from datetime import datetime
+import locale
+
+print("==== MESIN KASIR WARUNG KOPI RIFATH ====")
+sekarang = datetime.now()
+print(f"{sekarang.strftime('%A, %d-%m-%Y %H:%M:%S')}")
+
+total_belanja = 0  # ini "kertas struk" kamu yang awalnya 0
+total_qty = 0
+diskon = 0.17
+
+keranjang = {} # wadah struk belanja
+while True: # Loop (trus ulangi) sampe user bilang "bayar"
+    #print("Menu: \n1.Kopi \n2.Teh \n3.Roti \n4.Mie rebus \n5.Mie goreng \n6.Gorengan \n7.Bayar")
+    pilih = input("Menu ")
+
+    if pilih == "7":
+        break # Keluar Loop kalo user milih bayar
+
+    #1. Tentuin harga dasar
+    if pilih == "1":
+        nama = "Kopi"
+        harga_dasar = 5000
+    elif pilih == "2":
+        nama = "Teh"
+        harga_dasar =  3000
+    elif pilih == "3":
+        nama = "Roti"
+        harga_dasar = 3000
+    elif pilih == "4":
+        nama = "Mie rebus"
+        harga_dasar = 6000
+    elif pilih == "5":
+        nama = "Mie goreng"
+        harga_dasar = 6000
+    elif pilih == "6":
+        nama = "Gorengan"
+        harga_dasar = 1500
+    else:
+        print("Menu gak ada!")
+        continue
+
+    #2. Tentuin harga porsi - ini "if bersarang" nya
+    #Porsi = Kecil /Sedang /Besar
+    porsi = input("Porsi : ").capitalize()
+
+    if porsi == "Sedang":
+        harga = harga_dasar + 1000
+    elif porsi == "Besar":
+        harga = harga_dasar * 1.5
+    else: # Kecil atau salah ketik
+        harga = harga_dasar
+        porsi = "Kecil"
+    
+    #3. Akumulasi ke total_belanja + masukin ke keranjang
+    total_belanja = total_belanja + harga 
+
+# bikin kunci unik: "Kopi Sedang"
+    kunci = f"{nama} {porsi}"
+    if kunci in keranjang:
+        keranjang[kunci][0] += 1
+        keranjang[kunci][1] += harga
+    else:
+        keranjang[kunci]= [1, harga]
+
+#4. Setelah loop selesai = print struk
+print("\nWARUNG KOPI RIFATH")
+print("Jl. data Analyst No. 17, Jakarta Pusat")
+print(f"{sekarang.strftime('%d-%m-%Y %H:%M:%S')} WIB")
+print("-" * 30)
+for kunci, data in keranjang.items():
+    qty = data[0]
+    subtotal = data[1]
+    print(f"{kunci} x{qty}      Rp{int(subtotal):,}")
+print("-" * 30)
+print(f"SUBTOTAL        Rp{int(total_belanja):,}")
+print(f"DISKON 17%      Rp{int(diskon * total_belanja):,}")
+print(f"TOTAL BAYAR     Rp{int(total_belanja - (diskon * total_belanja)):,}")
+print("-" * 30)
+print("Terimakasih sudah mampir!")
+print("* SIMPAN STRUK INI *")
+
+
